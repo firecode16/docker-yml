@@ -1,0 +1,61 @@
+version: '3'
+
+services:
+  # Database Service (MySql)
+  host_mysql_db:
+    container_name: mysql_db
+    image: mysql:5.7
+    volumes:
+      - $PWD/mysql_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: admin123
+      MYSQL_DATABASE: DB_LOCAL
+      MYSQL_USER: server
+      MYSQL_PASSWORD: admin123
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
+    networks:
+      - backend_net
+
+  # Database Service (PostgreSQL)
+  host_postgres_db:
+    container_name: postgres_db
+    image: postgres:latest
+    volumes:
+      - $PWD/postgres_data:/var/lib/postgres
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin
+    ports:
+      - '5432:5432'
+    networks:
+      - backend_net
+  
+  # Database Service (MongoDB)
+  host_mongo_db:
+    container_name: mongo_db
+    image: mongo:latest
+    volumes:
+      - $PWD/mongodb_data:/var/lib/mongodb
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: master
+      MONGO_INITDB_ROOT_PASSWORD: master
+      MONGO_INITDB_DATABASE: brain_db_dev
+    ports:
+      - 27017:27017
+    networks:
+      - backend_net
+
+volumes:
+  mysql_data:
+  postgres_data:
+  mongodb_data:
+
+# Networks to be created to facilitate communication between containers
+networks:
+  backend_net:
